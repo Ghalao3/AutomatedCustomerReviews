@@ -1,116 +1,82 @@
-# 📦 Amazon Product Review Analysis System
+# Amazon Product Review Analysis Project
 
-## 📝 Project Overview
+## 1. Project Description
 
-This project implements a comprehensive analysis system for Amazon product reviews using state-of-the-art Natural Language Processing (NLP) and unsupervised learning techniques. The system includes:
+### **Project Overview:**
+This project is a web-based application designed to analyze Amazon product reviews using machine learning techniques such as sentiment classification, product category clustering, and review summarization. The goal is to assist marketing teams and decision-makers by providing instant insights into how products are perceived by customers, common issues, and product performance within different categories.
 
-- **Sentiment Analysis** (using RoBERTa)  
-- **Review Clustering** (using Sentence Embeddings + KMeans)  
-- **Summarization of Reviews** (with T5-small model)  
-- **Automated Product Comparison Articles**  
-- **Interactive Web Deployment** (using Gradio)
-
----
-
-## 📊 Dataset
-
-The system uses a combination of review datasets:
-
-- `new_data.csv` – General Amazon product reviews  
-- `All_Beauty.csv` – Amazon Beauty reviews  
-
-After cleaning and merging, the final dataset includes:
-
-- Review text  
-- Star rating (converted to sentiment)  
-- Product name and category  
+### **Main Objectives:**
+- Classify customer reviews as Positive, Neutral, or Negative.
+- Cluster products into categories.
+- Generate article-like summaries for each product or category.
 
 ---
 
-## 🧹 Data Preprocessing
+## 2. Datasets and Preprocessing
 
-Key steps:
+### **A. Datasets Used:**
+1. **clustered_reviews.csv**: Contains Amazon reviews with precomputed clustering labels, product names, and categories.
+2. **balanced_reviews_dataset.csv**: A balanced dataset to support effective sentiment classification.
 
-- Map star ratings to sentiment:
-  - Negative: 1–2 stars
-  - Neutral: 3 stars
-  - Positive: 4–5 stars
-- Clean text (lowercase, punctuation removal)
-- Balance dataset (equal class representation)
-- Split into train/test sets (80/20)
-
----
-
-## 🔍 Sentiment Analysis (RoBERTa)
-
-### ⚙️ Model Details
-
-- Pretrained model: `roberta-base`
-- Fine-tuned for 3-class classification
-
-**Training:**
-
-- Epochs: 5  
-- Batch size: 32  
-- Learning rate: 2e-5  
-- Early stopping (patience = 3)
-
-### 📈 Performance
-
-| Sentiment | F1 Score |
-|-----------|----------|
-| Negative  | ~0.90    |
-| Neutral   | ~0.85    |
-| Positive  | ~0.95    |
-
-**Accuracy:** ~0.92
-
-### 📊 Evaluation Metrics
-
-- Accuracy  
-- Precision, Recall, F1-score (per class)  
-- Confusion Matrix  
-
-### 💾 Saved Model
-
-- `./roberta_model/` (local)  
-- `/content/drive/MyDrive/roberta_model` (Google Drive)  
+### **B. Preprocessing Steps:**
+1. Loaded both datasets and checked for missing values.
+2. Renamed inconsistent columns for merging (e.g., `reviews.text` to `text`, `product_name` to `name`).
+3. Created a unified dataset with consistent column names: `name`, `text`, `categories`, `cluster_name`.
+4. Cleaned the text fields by removing extra commas, line breaks, and duplicate reviews.
+5. Limited the number of reviews processed per product to speed up model inference.
 
 ---
 
-## 📚 Review Clustering
+## 3. Task Approach
 
-### 📌 Process
+### **A. Sentiment Classification:**
+- **Model Used**: `roberta_model` (fine-tuned for text classification)
+- **Purpose**: Classifies each review as Positive, Neutral, or Negative.
+- **Implementation**:
+  - Tokenized review text using `AutoTokenizer`.
+  - Passed input to `AutoModelForSequenceClassification`.
+  - Used model logits to determine the predicted sentiment label.
 
-- Combined features: review text + product name + category  
-- Embedding model: `MiniLM-L6-v2`  
-- Clustering algorithm: KMeans (n=5)  
-- Visualization: t-SNE  
+### **B. Product Category Clustering:**
+- **Precomputed Offline**: Using KMeans on sentence embeddings.
+- **Cluster Labels**: Mapped to descriptive categories (e.g., Ebook Readers, Batteries, Accessories).
+- **Usage**: Enables users to search by category or view group-level insights.
 
-### 📦 Outputs
-
-- `kmeans_model.pkl`: Trained KMeans model  
-- `cluster_names.pkl`: Cluster name mappings  
-- `clustered_reviews.csv`: Labeled dataset with clusters  
-
-### 🧠 Final Clusters
-
-1. General Feedback  
-2. Family Use & E-Reading  
-3. Product Satisfaction & Family Use  
-4. Battery Reviews  
-5. Multi-theme  
+### **C. Review Summarization:**
+- **Model Used**: `t5_small` (pretrained summarization model)
+- **Purpose**: Generates brief, coherent summaries of product feedback.
+- **Steps**:
+  - Cleaned and deduplicated review text.
+  - Limited to 3 representative reviews per product.
+  - Formatted a prompt: "Summarize reviews for 'Product X'..."
+  - Used Hugging Face pipeline to generate summaries.
+  - Repeated for top 3 products in the category and one worst-rated product.
 
 ---
 
-## ✍️ Review Summarization
+## 4. Web Application (User Interface)
 
-- **Model:** `t5-small`  
-- For each product and sentiment, generates:
-  - Summary of positive reviews  
-  - Summary of negative reviews  
+- **Framework**: Gradio (Blocks)
+- **Theme**: Soft layout with Amazon branding
 
-```python
-def summarize_reviews(df, product_name, category, sentiment):
-    # Extract reviews
-    # Generate summary using T5-small
+### **Layout Features:**
+- Amazon logo, large headline, and call-to-action.
+- Input field for product/category search.
+- Accordion-style result display for a clean user experience.
+- Output boxes for matched product, category, sentiment stats, and AI-generated summaries.
+
+### **Styling**:
+- Integrated a TailwindCSS-like appearance.
+- Used Gradio Markdown and column components for layout.
+- Icons and color highlights enhance readability and engagement.
+
+---
+
+## 5. Final Features Summary:
+- 🔍 **Search by product or category name**
+- 🧾 **Return the matched product and cluster category**
+- 📊 **Visualize the sentiment distribution from classified reviews**
+- 📝 **Generate a summary with**:
+  - Top 3 products in category (with complaint count)
+  - AI-generated summary for each product
+  - Worst-rated product with generated summary
