@@ -10,8 +10,6 @@ This project is a web-based application designed to analyze Amazon product revie
 - Cluster products into categories.
 - Generate article-like summaries for each product or category.
 
----
-
 ## 2. Datasets and Preprocessing
 
 ### **A. Datasets Used:**
@@ -24,8 +22,6 @@ This project is a web-based application designed to analyze Amazon product revie
 3. Created a unified dataset with consistent column names: `name`, `text`, `categories`, `cluster_name`.
 4. Cleaned the text fields by removing extra commas, line breaks, and duplicate reviews.
 5. Limited the number of reviews processed per product to speed up model inference.
-
----
 
 ## 3. Task Approach
 
@@ -52,8 +48,6 @@ This project is a web-based application designed to analyze Amazon product revie
   - Used Hugging Face pipeline to generate summaries.
   - Repeated for top 3 products in the category and one worst-rated product.
 
----
-
 ## 4. Web Application (User Interface)
 
 - **Framework**: Gradio (Blocks)
@@ -70,8 +64,6 @@ This project is a web-based application designed to analyze Amazon product revie
 - Integrated a TailwindCSS-like appearance.
 - Used Gradio Markdown and column components for layout.
 - Icons and color highlights enhance readability and engagement.
-
----
 
 ## 5. Final Features Summary:
 - 🔍 **Search by product or category name**
