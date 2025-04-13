@@ -58,6 +58,7 @@ This project is a web-based application designed to analyze Amazon product revie
 
 - **Framework**: Gradio (Blocks)
 - **Theme**: Soft layout with Amazon branding
+- **https://drive.google.com/drive/folders/1_tzKFgf_JAs3VyfMJCb6eFmAFZQzryci?usp=drive_link**
 
 ### **Layout Features:**
 - Amazon logo, large headline, and call-to-action.
