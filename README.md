@@ -15,6 +15,7 @@ This project is a web-based application designed to analyze Amazon product revie
 ### **A. Datasets Used:**
 1. **clustered_reviews.csv**: Contains Amazon reviews with precomputed clustering labels, product names, and categories.
 2. **balanced_reviews_dataset.csv**: A balanced dataset to support effective sentiment classification.
+3. Full dataset access: [Click here to access the dataset](https://drive.google.com/drive/folders/11o6cX02JFwl8nDNFQPN2dv20PirlL6l9?usp=drive_link)
 
 ### **B. Preprocessing Steps:**
 1. Loaded both datasets and checked for missing values.
